@@ -1,27 +1,56 @@
 <?php
-session_start();
+    session_start();
+    if(isset($_SESSION['rno']))
+    {
+        if($_SESSION['level']=="admin")
+            {
+                header('Location: admin.php');
+            }
+            else
+            {
+                header('Location: action.php');
+            }
+    }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Printer Facilitator</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="css/style.css">
+        <title>Print Facilitator</title>
+        <link href="css/style.css" rel="stylesheet">
+        <link href="css/bootstrap-4.0.0.css" rel="stylesheet">
     </head>
     <body>
-        <h2>Printer Facilitator</h2>
-        <form action="" method="post" style="border:1px solid #ccc">
-            <p id=try class="login-status">Welcome!</p>
-            <div class="imgcontainer">
-                <img src="avatar.png" alt="Avatar" class="avatar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light offset-lg-0 col-lg-12">
+            <a class="navbar-brand" href="action.php">Printer Facilitator</a>
+        </nav>
+        <header>
+            <div class="jumbotron">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <p id=try class="login-status">Welcome!</p>
+                            <div class="imgcontainer">
+                                <img src="avatar.png" alt="Avatar" class="avatar">
+                            </div>
+                            <form class="align-content-center" method="POST" enctype="multipart/form-data" action="">
+                                <div class="form-group col-lg-4 offset-lg-4">
+                                    <input type="text" class="form-control" placeholder="Enter Roll No" name="rno" required>
+                                    <input type="password" class="form-control" placeholder="Enter Password" name="psw" required>
+                                    <button type="submit" class="btn btn-primary" style="width:100%" name="login">Login</button>
+                                    <a class="nav-link" href="signup.php" class="signup-image-link">Sign Up</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="container">
-                <input type="text" placeholder="Enter Roll No" name="rno" required>
-                <input type="password" placeholder="Enter Password" name="psw" required>
-                <button type="submit" style="width:100%"name="login">Login</button>
-                <a href="signup.php" class="signup-image-link">Sign Up</a>
-            </div>
-        </form>
+        </header>
+        <script src="js/jquery-3.2.1.min.js"></script> 
+        <script src="js/popper.min.js"></script> 
+        <script src="js/bootstrap-4.0.0.js"></script>
     </body>
 </html>
 <?php
@@ -41,6 +70,8 @@ session_start();
                 p.textContent = 'Login Success';
             </script>";
             $_SESSION['rno']=$rno;
+            $_SESSION['status']='success';
+            $_SESSION['level']=$row['level'];
             if($row['level']=="admin")
             {
                 header('Location: admin.php');

@@ -39,11 +39,20 @@
 	    </div>
     </nav>
     <header>
-      <div class="jumbotron">
+    <div class="jumbotron">
+        
         <div class="container">
           <div class="row">
             <div class="col-12">
               <h1 class="text-center">Print History</h1>
+              <div class="container ">
+                <div class="row">
+                  <div class="col-md-6 col-sm-12 text-center col-lg-4 offset-lg-4">
+                    <font size=5 id='balance'><p></p></font>
+                    <br>
+                  </div>
+                </div>
+              </div>
                     <?php
                         $rno=$_SESSION['rno'];
                         $q="SELECT * FROM printhistory WHERE rno='$rno'";
@@ -51,6 +60,7 @@
                         if ($result->num_rows > 0) 
                         {
                             echo"
+                            <p align=right>Green for 'yes' and Red for 'no'</p>
                             <table align=center class='table border' id=table_id>
                             <thead>
                                 <tr>
@@ -59,9 +69,10 @@
                                     <th width=100>Color</td>
                                     <th width=100>Pages</td>
                                     <th width=100>Copies</td>
-                                    <th width=100>Print Status</td>
-                                    <th width=100>Collection Status</td>
-                                    <th width=100>Payment Status</td>
+                                    <th width=100>Cost</td>
+                                    <th width=100>Printed ?</td>
+                                    <th width=110>Collected ?</td>
+                                    <th width=100>Paid ?</td>
                                 </tr>
                             </thead>";
                             
@@ -74,6 +85,7 @@
                                     <td bgcolor=". $row["color"]."></td>
                                     <td>".$row['pages']."</td>
                                     <td>". $row["copies"]."</td>
+                                    <td>". $row["cost"]."</td>
                                     <td bgcolor=".$row["printstatus"]."></td>
                                     <td bgcolor=".$row["collectstatus"]."></td>
                                     <td bgcolor=".$row["paystatus"]."></td>
@@ -82,7 +94,7 @@
                         echo"</table>";
                         } 
                         else
-                        echo"No print History Found";
+                        echo"<p align=center>No print History Found</p>";
                     ?>
             </div>
           </div>
@@ -92,13 +104,7 @@
 <section>
 	<div class="container">
   </div>
-  <div class="container ">
-    <div class="row">
-      <div class="col-md-6 col-sm-12 text-center col-lg-4 offset-lg-4">
-        <span id=balance><h1></h1></span>
-      </div>
-    </div>
-  </div>
+  
   <div class="row">
     <div class="col-lg-12 mb-4 mt-2 text-center">
     </div>
@@ -118,6 +124,16 @@
   </body>
 </html>
 <script>
+  var b = document.getElementById('balance');
+  var bal='<?php 
+  $rno=$_SESSION['rno'] ;
+  $sql="SELECT * from main WHERE rno='$rno'";
+  $result=$conn->query($sql);
+  $row=$result->fetch_assoc();
+  $lastid=$row["balance"];
+  echo $lastid; ?>';
+  bal=parseInt(bal);
+  b.innerHTML ='Amount to be paid is '+bal;
     function color(b)
     {
         if(b==0)

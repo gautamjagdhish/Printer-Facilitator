@@ -1,27 +1,48 @@
 <?php
     session_start();
+    if(!empty($_SESSION['status']))
+    {
+        header('Location:logout.php');
+    }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Sign Up</title>    
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sign Up!</title>
+        <link href="css/style.css" rel="stylesheet">
+        <link href="css/bootstrap-4.0.0.css" rel="stylesheet">
     </head>
     <body>
-        <h2>Printer Facilitator</h2>
-        <form action="" method="post" style="border:1px solid #ccc">
-        <div class="container">
-            <h1>Sign Up</h1>
-            <p>Please fill in this form to create an account.</p>
-            <hr>
-            <input type="text" placeholder="Enter Roll No" onkeyup='checkint();' name="rno" id='rno' required>
-            <input type="password" placeholder="Enter Password" name="psw" id=pwd1 onkeyup='check();' required>
-            <span class='password-match' id='message'></span>
-            <input type="password" placeholder="Repeat Password" name="psw-repeat" id=pwd2 onkeyup='check();' required>
-            <button type="submit" name="signup" class="signupbtn" onclick='return checkpwd();'>Sign Up</button>
-            <a href="login.php" class="signup-image-link">Already created a account?</a>
-        </div>
-        </form>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light offset-lg-0 col-lg-12">
+            <a class="navbar-brand" href="action.php">Printer Facilitator</a>
+        </nav>
+        <header>
+            <div class="jumbotron">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="text-center">Sign Up! </h1>
+                            <form class="align-content-center" method="POST" enctype="multipart/form-data" action="">
+                                <div class="form-group col-lg-4 offset-lg-4">
+                                    <input type="text" class="form-control" placeholder="Enter Roll No"  onkeyup='checkint();' name="rno" id='rno' required>
+                                    <input type="password" placeholder="Enter Password" class="form-control" name="psw" id=pwd1 onkeyup='check();' required>
+                                    <span class='password-match' id='message'></span>
+                                    <input type="password" placeholder="Repeat Password" class="form-control" name="psw-repeat" id=pwd2 onkeyup='check();' required>
+                                    <button type="submit" class="btn btn-primary" style="width:100%" onclick='return checkpwd();' name="signup">Sign Up</button>
+                                    <a href="login.php" class="nav-link">Already created a account?</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <script src="js/jquery-3.2.1.min.js"></script> 
+        <script src="js/popper.min.js"></script> 
+        <script src="js/bootstrap-4.0.0.js"></script>
     </body>
 </html>
 <script>
@@ -47,7 +68,7 @@
         i=document.getElementById('rno').value
         if(i!=parseInt(i))
         {
-            alert("Please Enter only integer values");
+            alert("Please Enter Roll number as integer values");
             return false;
         }
     }
@@ -62,20 +83,22 @@
     }
 </script>
 <?php
-    include("database.php");
     if(isset($_REQUEST['signup']))
     {
+        $random = substr(number_format(time()*rand(),0,'',''),0,6);
         $rno=$_POST['rno'];
-        $psw=$_POST['psw'];
-        $hash=hash('sha256',$psw);
-        mysqli_query($conn,"INSERT INTO main(rno,password,level) VALUES('$rno','$hash','student')");
-        if(mysqli_affected_rows($conn)>0)
+        $_SESSION['rno']=$rno;
+        $_SESSION['pw']=$_POST['psw'];
+        $_SESSION['xxx']=$random;
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "iitdhprint@gmail.com";
+        $to = $rno."@iitdh.ac.in";
+        $subject = "Verification Code for Printer Facilitator";
+        $message = "Verification code is ".$random;
+        if(mail($to,$subject,$message))
         {
-            echo "Added Succcessfully";
-        }  
-        else
-        {
-            echo"Please recheck the values";
-        } 
+            header('Location:verification.php');
+        }
     }
 ?>

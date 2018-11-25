@@ -1,8 +1,10 @@
 <?php
   include"database.php";
   session_start();
-  if(empty($_SESSION['rno']))
-    header('Location:login.php');
+  if(empty($_SESSION['level']))
+    header('Location:logout.php');
+  if($_SESSION['level']=='admin')
+    header('Location:admin.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,14 +36,16 @@
                   <label for="Upload">Upload</label>
                   <input type="file" class="form-control" name="file" required>
                   <label for="Pages">Pages</label>		
-                  <input type="text" class="form-control" name="pages" value="All" required>
+                  <input type="text" class="form-control" name="pages" id="pages" value="All" required>
                   <label for="Upload">Copies</label>
                   <input type="number" class="form-control" name="copies" min=1 value=1 required>
                   <input type="checkbox" name="color" value="true" unchecked><label for="Color" >Color</label><br>
                   <label for="Submit"></label> 
-                  <input type="submit" class="btn btn-primary" name='submit' value="New Print"></input>
+                  <input type="submit" class="btn btn-primary" name='submit' onclick="return checkstring();" value="New Print"></input>
                   <br>
                   <span id='status' style="text-align:center"></span>
+                  <br>
+                  <span id='status1' style="text-align:center"></span>
                 </div>
               </form>
             </div>
@@ -77,37 +81,104 @@
     <script src="js/bootstrap-4.0.0.js"></script>
   </body>
 </html>
+<script>
+  function showid()
+  {
+    var p = document.getElementById('status1');
+    var id='<?php 
+    $sql="SELECT MAX(id) AS lastid from printhistory";
+    $result=$conn->query($sql);
+    $row=$result->fetch_assoc();
+    $lastid=$row["lastid"];
+    echo $lastid; ?>';
+    id=parseInt(id)+1;
+    p.innerHTML ='Print Job ID is '+id;
+  }
+    
+  function checkstring()
+		{
+			str = document.getElementById('pwd1').value;				
+			t1 = /[0-9]+/;
+			t2=/[0-9]+-[0-9]+/
+			if(!str.match(/^[0-9]+(?:-[0-9]+)?(,[0-9]+(?:-[0-9]+)?)*$/))
+			{
+				alert("Invalid entry");
+				return false;
+			}
+			arr = str.split(/[,-]/).map(Number);
+			for (var i = 0; i < arr.length-1; i++)
+			{
+				if (arr[i+1]<=arr[i])
+				{
+					alert("Invalid entry");
+					return false;
+				}
+			}
+			var count1 = 0;
+			var count2 = 0;
+			brr = str.split(/[,]/);
+			console.log(brr);
+			for (var i = 0; i < brr.length; i++,count2 = 0) 
+			{
+				var stri = brr[i];
+				for (var j = 0; j < stri.length; j++) 
+				{
+					if(stri[j] =='-')
+					{
+						var nums = stri.split(/[-]/).map(Number);
+						count1 = count1 + nums[1]-nums[0]+1;
+						count2++;
+					}
+				}
+				if(count2 == 0)
+				{
+					count1++;
+				}
+			}
+			console.log(count1);
+		} 
+</script>
 <?php
 $rno=$_SESSION['rno'];
 if(isset($_REQUEST['submit']))
 {
     if(empty($_POST['color'])) 
-      $color='red';
+    {
+      $color='#CE0C00';
+      $cost=1;
+    }
     else
+    {
       $color='green';
+      $cost=5;
+    }
     $pdfname=$_FILES['file']['name'];
     $target="uploads/".basename($pdfname);
     $pages=$_POST['pages'];
     $copies=$_POST['copies'];
     $nopages=1;
+    $totalcost=$nopages*$cost*$copies;
     if(move_uploaded_file($_FILES['file']['tmp_name'],$target))
     {
         $status="Successfully uploaded";
-        mysqli_query($conn,"UPDATE main SET balance='$nopages' WHERE rno='$rno'");
-        if (!mysqli_query($conn,"UPDATE main SET balance='$nopages' WHERE rno='$rno'"))
+        mysqli_query($conn,"UPDATE main SET balance=balance+'$totalcost' WHERE rno='$rno'");
+        /*if (!mysqli_query($conn,"UPDATE main SET balance='$nopages' WHERE rno='$rno'"))
         {
           echo("<br>Error description: ".mysqli_error($conn)."<br>");
-        }
-        
-        mysqli_query($conn,"INSERT INTO printhistory(pdfname,rno,color,pages,copies) VALUES ('$pdfname','$rno','$color','$pages','$copies')");
+        }*/
         echo "<script>showid();</script>";
+        mysqli_query($conn,"INSERT INTO printhistory(pdfname,rno,color,pages,copies,cost) VALUES ('$pdfname','$rno','$color','$pages','$copies','$totalcost')");
         /*if (!mysqli_query($conn,"INSERT INTO printhistory(pdfname,rno,color,pages,copies) VALUES ('$pdfname','$rno','$color','$pages','$copies')"))
         {
           echo("<br>Error description: ".mysqli_error($conn)."<br>");
         }
         if(mysqli_affected_rows($conn)<=0)
           echo "error";-->*/
-        
+          echo"
+          <script>
+            var p = document.getElementById('status');
+            p.innerHTML ='Uploaded Successfully';
+          </script>";
     }
     else
     {
@@ -118,21 +189,5 @@ if(isset($_REQUEST['submit']))
             p.innerHTML ='Uploaded Failed';
           </script>";
     }
-    
 }
-
 ?>
-<script>
-  function showid()
-  {
-    var p = document.getElementById('status');
-    var id='<?php 
-    $sql="SELECT MAX(id) AS lastid from printhistory";
-    $result=$conn->query($sql);
-    $row=$result->fetch_assoc();
-    $lastid=$row["lastid"];
-    echo $lastid; ?>';
-    alert(id);
-    p.innerHTML ='Successfully uploaded. Print Job ID is '+id;
-  }
-</script>

@@ -1,8 +1,10 @@
 <?php
   include"database.php";
   session_start();
-  if(empty($_SESSION['rno']))
-    header('Location:login.php');
+  if(empty($_SESSION['level']))
+    header('Location:logout.php');
+  if($_SESSION['level']=='student')
+    header('Location:action.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,17 +56,16 @@
                             <thead>
                                 <tr>
                                     <th width=100>ID</td>
-                                    <th width=200>Roll Number</td>
                                     <th width=300>PDF Name</td>
                                     <th width=100>Color</td>
                                     <th width=100>Pages</td>
                                     <th width=100>Copies</td>
-                                    <th width=100>Print Status</td>
-                                    <th width=100>Collection Status</td>
-                                    <th width=100>Payment Status</td>
+                                    <th width=100>Cost</td>
+                                    <th width=100>Printed</td>
+                                    <th width=100>Collected</td>
+                                    <th width=100>Paid</td>
                                 </tr>
                             </thead>";
-                            
                             while($row = $result->fetch_assoc()) 
                             {
                                 echo"
