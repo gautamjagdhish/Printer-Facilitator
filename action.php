@@ -34,19 +34,20 @@ if($_SESSION['level']=='admin')
 						<form class="align-content-center" method="POST" enctype="multipart/form-data" action="">
 							<div class="form-group col-lg-4 offset-lg-4">
 								<label for="Upload">Upload</label>
-								<input type="file" class="form-control" name="file" required>
+								<input type="file" class="form-control" name="file" id='file' required>
 								<label for="Pages">Pages</label>		
-								<input type="text" class="form-control" name="pages" id="pages" value="All" required>
+								<input type="text" class="form-control" name="pages" id="pages" value="1" required>
 								<!--<input type=button onclick=></button>-->
 								<label for="Upload">Copies</label>
-								<input type="number" class="form-control" name="copies" min=1 value=1 required>
-								<input type="checkbox" name="color" value="true" unchecked><label for="Color" >Color</label><br>
-								<button type="submit" class="btn btn-primary" name='submit' onclick="return checkstring();">New Print</button>
+								<input type="number" class="form-control" name="copies" id='copies' min=1 value=1 required>
+								<input type="checkbox" name="color" id='color' value="true" unchecked><label for="Color" >Color</label><br>
+								<button type="submit" class="btn btn-primary" name='submit' onclick='return checkcountconfirm();'>New Print</button>
 								<br>
 								<span id='status' style="text-align:center"></span>
 								<br>
 								<span id='status1' style="text-align:center"></span>
-								<input type=hidden id=hider>
+								<input type=hidden id=totalcost name=totalcost>
+								<input type=hidden id=nopages name=nopages>
 							</div>
 						</form>
 					</div>
@@ -57,10 +58,6 @@ if($_SESSION['level']=='admin')
 </body>
 </html>
 <script>
-	function checkpdf()
-	{
-
-	}
 	function showid()
 	{
 		var p = document.getElementById('status1');
@@ -73,9 +70,27 @@ if($_SESSION['level']=='admin')
 		id=parseInt(id)+1;
 		p.innerHTML ='Print Job ID is '+id;
 	}
-	function checkstring()
+	var fileInput = document.getElementById('file');
+	fileInput.onchange=function ext()
 	{
-		alert("it came here");
+		var filePath = fileInput.value;
+		var allowedExtensions = /(\.pdf)$/i;
+		if(!allowedExtensions.exec(filePath))
+		{
+				alert('Upload only .pdf files');
+				return false;
+		}
+	};
+	function checkcountconfirm()
+	{
+		var fileInput = document.getElementById('file');
+		var filePath = fileInput.value;
+		var allowedExtensions = /(\.pdf)$/i;
+		if(!allowedExtensions.exec(filePath))
+		{
+			alert('Upload only .pdf files');
+			return false;
+		}
 		str = document.getElementById('pages').value;				
 		t1 = /[0-9]+/;
 		t2=/[0-9]+-[0-9]+/
@@ -110,39 +125,33 @@ if($_SESSION['level']=='admin')
 				}
 			}
 			if(count2 == 0)
-			{
 				count1++;
-			}
 		}
-		document.getElementById('hider').value=count1;
-	} 
-	function confirm()
-	{
-		var somecost='<?php
-		if(empty($_POST['color'])) 
-		$cost=1;
+		document.getElementById('nopages').value=count1;
+
+		var copies=document.getElementById('copies').value;
+		if(document.getElementById('color').checked==true)
+			color=5;
 		else
-		$cost=5;
-		$copies=$_POST['copies'];
-		$somecost=$cost*$copies;
-		echo $somecost;
-		?>';
-		var totalcost=somecost*checkstring();
-		r=confirm("Cost of Printing is "+totalcost);
+			color=1;
+		var totalcost=copies*count1*color;
+		alert("copies "+copies+"\ncolor "+color+"\npages "+count1);
+		r=confirm("Cost of Printing is ₹"+totalcost);
 		if(r==true)
-		{
-
-		}
-		else
-		{
-
-		}
+			document.getElementById('totalcost').value=totalcost;
+		if(r==false)
+			return false;
 	}
 </script>
 <?php
 $rno=$_SESSION['rno'];
 if(isset($_REQUEST['submit']))
 {
+	$sql="SELECT MAX(id) AS lastid from printhistory";
+	$result=$conn->query($sql);
+	$row=$result->fetch_assoc();
+	$lastid=$row["lastid"];
+	$id=$lastid+1;
 	if(empty($_POST['color'])) 
 	{
 		$color='0';
@@ -154,37 +163,34 @@ if(isset($_REQUEST['submit']))
 		$cost=5;
 	}
 	$pdfname=$_FILES['file']['name'];
-	$target="uploads/".basename($pdfname);
 	$pages=$_POST['pages'];
 	$copies=$_POST['copies'];
-	$nopages=1;
-	$totalcost=$nopages*$cost*$copies;
-	$sql="SELECT MAX(id) AS lastid from printhistory";
-	$result=$conn->query($sql);
-	$row=$result->fetch_assoc();
-	$lastid=$row["lastid"];
-	$lastid++;
+	$nopages=$_POST['pages'];
+	$totalcost=$_POST['totalcost'];
+	$newname=$id."_".$nopages."_".$copies."_".$color.".pdf";
+	$target="uploads/".basename($newname);
 	if(move_uploaded_file($_FILES['file']['tmp_name'],$target))
 	{
 		$status="Successfully uploaded";
 		mysqli_query($conn,"UPDATE main SET balance=balance+'$totalcost' WHERE rno='$rno'");
 		/*if (!mysqli_query($conn,"UPDATE main SET balance='$nopages' WHERE rno='$rno'"))
 		{
-		echo("<br>Error description: ".mysqli_error($conn)."<br>");
+		echo("<br>Unable to Update Balance: ".mysqli_error($conn)."<br>");
 		}*/
 		echo "<script>showid();</script>";
-		mysqli_query($conn,"INSERT INTO printhistory(pdfname,rno,color,pages,copies,cost) VALUES ('$pdfname','$rno','$color','$pages','$copies','$totalcost')");
-		/*if (!mysqli_query($conn,"INSERT INTO printhistory(pdfname,rno,color,pages,copies) VALUES ('$pdfname','$rno','$color','$pages','$copies')"))
+		mysqli_query($conn,"INSERT INTO printhistory(pdfname,newname,rno,color,pages,copies,cost) VALUES ('$pdfname','$newname','$rno','$color','$pages','$copies','$totalcost')");
+		/*if (!mysqli_query($conn,"INSERT INTO printhistory(pdfname,newname,rno,color,pages,copies,cost) VALUES ('$pdfname','$newname','$rno','$color','$pages','$copies','$totalcost')"))
 		{
-		echo("<br>Error description: ".mysqli_error($conn)."<br>");
-		}
+		echo("<br>Unable to insert to printhistory: ".mysqli_error($conn)."<br>");
+		}*/
 		if(mysqli_affected_rows($conn)<=0)
-		echo "error";-->*/
-		echo"
-		<script>
-			var p = document.getElementById('status');
-			p.innerHTML ='Uploaded Successfully';
-		</script>";
+			echo "error";
+		else
+			echo"
+			<script>
+				var p = document.getElementById('status');
+				p.innerHTML ='Uploaded Successfully';
+			</script>";
 	}
 	else
 	{

@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html>
 <body>
-		<form onsubmit='checkstring();'>
-	Fill it: <input type="text" id="pwd1"><br>
-	<input type="submit" value="Click">
-	<span id='message'></span>
-</form>
-
+	<form>
+		Fill it: <input type="file" id="file"><br>
+		<input type="submit" value="Click" onclick='ext();'>
+	</form>
 </body>
 </html>
 <script>
 	function ext()
 	{
-		var fileInput = document.getElementById('fileToUpload');
+		var fileInput = document.getElementById('file');
 		var filePath = fileInput.value;
 		var allowedExtensions = /(\.pdf)$/i;
 		if(!allowedExtensions.exec(filePath))
@@ -20,47 +18,5 @@
 				alert('Upload only .pdf files');
 				return false;
 		}
-	}
-	function checkstring()
-	{
-		str = document.getElementById('pwd1').value;				
-		t1 = /[0-9]+/;
-		t2=/[0-9]+-[0-9]+/
-		if(!str.match(/^[0-9]+(?:-[0-9]+)?(,[0-9]+(?:-[0-9]+)?)*$/))
-		{
-			alert("Invalid entry");
-			return false;
-		}
-		arr = str.split(/[,-]/).map(Number);
-		for (var i = 0; i < arr.length-1; i++)
-		{
-			if (arr[i+1]<=arr[i])
-			{
-				alert("Invalid entry");
-				return false;
-			}
-		}
-		var count1 = 0;
-		var count2 = 0;
-		brr = str.split(/[,]/);
-		console.log(brr);
-		for (var i = 0; i < brr.length; i++,count2 = 0) 
-		{
-			var stri = brr[i];
-			for (var j = 0; j < stri.length; j++) 
-			{
-				if(stri[j] =='-')
-				{
-					var nums = stri.split(/[-]/).map(Number);
-					count1 = count1 + nums[1]-nums[0]+1;
-					count2++;
-				}
-			}
-			if(count2 == 0)
-			{
-				count1++;
-			}
-		}
-		console.log(count1);
 	}
 </script>

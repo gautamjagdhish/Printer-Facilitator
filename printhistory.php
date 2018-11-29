@@ -64,7 +64,7 @@
                             <thead>
                                 <tr>
                                     <th width=100>ID</td>
-                                    <th width=300>PDF Name</td>
+                                    <th width=300>PDF Name(Click to view)</td>
                                     <th width=100>Color</td>
                                     <th width=100>Pages</td>
                                     <th width=100>Copies</td>
@@ -80,11 +80,11 @@
                                 echo"
                                 <tr>
                                     <td>".$row["id"]."</td>
-                                    <td>". $row["pdfname"]."</td>
+										                <td><a href=uploads/".$row["newname"]." target=_blank class=nav-link style='color:grey' >".$row["pdfname"]."</a></td>
                                     <td><input type=checkbox style='pointer-events: none;' "; if($row['color']==1) echo "checked"; echo"></td>
                                     <td>".$row['pages']."</td>
                                     <td>". $row["copies"]."</td>
-                                    <td>". $row["cost"]."</td>
+                                    <td>₹". $row["cost"]."</td>
                                     <td><input type=checkbox style='pointer-events: none;' "; if($row['printstatus']==1) echo "checked"; echo"></td>
                                     <td><input type=checkbox style='pointer-events: none;' "; if($row['collectstatus']==1) echo "checked"; echo"></td>
                                     <td><input type=checkbox style='pointer-events: none;' "; if($row['paystatus']==1) echo "checked"; echo"></td>
