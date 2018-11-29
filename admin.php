@@ -79,12 +79,43 @@ if($_SESSION['level']=='student')
 										<td>".$row['pages']."</td>
 										<td>". $row["copies"]."</td>
 										<td>". $row["cost"]."</td>
-										<form action='' method=post name=".$row['rno'].">
-										<td><input type=checkbox "; if($row['printstatus']==1) echo "checked"; echo"></td>
-										<td><input type=checkbox "; if($row['collectstatus']==1) echo "checked"; echo"></td>
-										<td><input type=checkbox "; if($row['paystatus']==1) echo "checked"; echo"></td>
+										<form action='' method=post>
+										<td><input type=checkbox name=ps "; if($row['printstatus']==1) echo "checked"; echo"></td>
+										<td><input type=checkbox name=cs "; if($row['collectstatus']==1) echo "checked"; echo"></td>
+										<td><input type=checkbox name=pay "; if($row['paystatus']==1) echo "checked"; echo"></td>
 										<td><input type=submit class=btn btn-primary name=submit value=Change></input></td>
+										<input type=hidden name=idfind value=".$row["id"].">
+										</form>
 									</tr>";
+										if(isset($_REQUEST['submit']))
+										{
+											$id=$_POST['idfind'];
+											if(isset($_POST['ps']))
+											{
+												mysqli_query($conn,"UPDATE printhistory SET printstatus=1 WHERE id='$id'");
+											}
+											if(empty($_POST['ps']))
+											{
+												mysqli_query($conn,"UPDATE printhistory SET printstatus=0 WHERE id='$id'");
+											}
+											if(isset($_POST['cs']))
+											{
+												mysqli_query($conn,"UPDATE printhistory SET collectstatus=1 WHERE id='$id'");
+											}
+											if(empty($_POST['cs']))
+											{
+												mysqli_query($conn,"UPDATE printhistory SET collectstatus=0 WHERE id='$id'");
+											}
+											if(isset($_POST['pay']))
+											{
+												mysqli_query($conn,"UPDATE printhistory SET paystatus=1 WHERE id='$id'");
+											}
+											if(empty($_POST['pay']))
+											{
+												mysqli_query($conn,"UPDATE printhistory SET paystatus=0 WHERE id='$id'");
+											}
+											header("Location:admin.php");
+										}	
 								}
 							echo"</table>";
 							} 
