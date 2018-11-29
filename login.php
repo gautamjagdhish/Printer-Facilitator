@@ -32,13 +32,15 @@
                     <div class="row">
                         <div class="col-12">
                             <p id=try class="login-status">Welcome!</p>
-                            <div class="imgcontainer">
+                            <div class="imgcontainer" align=center>
                                 <img src="avatar.png" alt="Avatar" class="avatar">
                             </div>
                             <form class="align-content-center" method="POST" enctype="multipart/form-data" action="">
                                 <div class="form-group col-lg-4 offset-lg-4">
                                     <input type="text" class="form-control" placeholder="Enter Roll No" name="rno" required>
+                                    <br>
                                     <input type="password" class="form-control" placeholder="Enter Password" name="psw" required>
+                                    <br>
                                     <button type="submit" class="btn btn-primary" style="width:100%" name="login">Login</button>
                                     <a class="nav-link" href="signup.php" class="signup-image-link">Sign Up</a>
                                 </div>

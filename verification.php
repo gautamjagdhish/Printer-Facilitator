@@ -1,5 +1,9 @@
 <?php
     session_start();
+    if(empty($_SESSION['toverify'])||$_SESSION['toverify']!="yes")
+    {
+        header('Location:logout.php');
+    }
     if(!empty($_SESSION['level']))
     {
         header('Location:logout.php');
@@ -30,6 +34,7 @@
                                     <span id="not">Please Enter the verification code sent to your email</span>
                                     <p id='yes'></p>
                                     <input type="text" class="form-control" placeholder="Enter Code"  onkeyup='checkint();' name="code" id="code" required>
+                                    <br>
                                     <button type="submit" class="btn btn-primary" style="width:100%" onclick='return checkint();' name="submit">Submit</button>
                                     <a href="login.php" class="nav-link">Already created a account?</a>
                                 </div>

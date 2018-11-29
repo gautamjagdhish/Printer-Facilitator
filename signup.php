@@ -12,8 +12,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Sign Up!</title>
-        <link href="css/style.css" rel="stylesheet">
         <link href="css/bootstrap-4.0.0.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light offset-lg-0 col-lg-12">
@@ -27,10 +28,14 @@
                             <h1 class="text-center">Sign Up! </h1>
                             <form class="align-content-center" method="POST" enctype="multipart/form-data" action="">
                                 <div class="form-group col-lg-4 offset-lg-4">
+                                    <br>
                                     <input type="text" class="form-control" placeholder="Enter Roll No"  onkeyup='checkint();' name="rno" id='rno' required>
+                                    <br>
                                     <input type="password" placeholder="Enter Password" class="form-control" name="psw" id=pwd1 onkeyup='check();' required>
                                     <span class='password-match' id='message'></span>
+                                    <br>
                                     <input type="password" placeholder="Repeat Password" class="form-control" name="psw-repeat" id=pwd2 onkeyup='check();' required>
+                                    <br>
                                     <button type="submit" class="btn btn-primary" style="width:100%" onclick='return checkpwd();' name="signup">Sign Up</button>
                                     <a href="login.php" class="nav-link">Already created a account?</a>
                                 </div>
@@ -98,6 +103,7 @@
         $message = "Verification code is ".$random;
         if(mail($to,$subject,$message))
         {
+            $_SESSION['toverify']="yes";
             header('Location:verification.php');
         }
     }

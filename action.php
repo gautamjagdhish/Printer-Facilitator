@@ -135,7 +135,7 @@
 					count1++;
 				}
 			}
-			console.log(count1);
+      
 		} 
 </script>
 <?php
@@ -144,12 +144,12 @@ if(isset($_REQUEST['submit']))
 {
     if(empty($_POST['color'])) 
     {
-      $color='#CE0C00';
+      $color='0';
       $cost=1;
     }
     else
     {
-      $color='green';
+      $color='1';
       $cost=5;
     }
     $pdfname=$_FILES['file']['name'];

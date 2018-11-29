@@ -60,7 +60,6 @@
                         if ($result->num_rows > 0) 
                         {
                             echo"
-                            <p align=right>Green for 'yes' and Red for 'no'</p>
                             <table align=center class='table border' id=table_id>
                             <thead>
                                 <tr>
@@ -70,9 +69,9 @@
                                     <th width=100>Pages</td>
                                     <th width=100>Copies</td>
                                     <th width=100>Cost</td>
-                                    <th width=100>Printed ?</td>
-                                    <th width=110>Collected ?</td>
-                                    <th width=100>Paid ?</td>
+                                    <th width=100>Print Status</td>
+                                    <th width=110>Collection Status</td>
+                                    <th width=100>Payment Status</td>
                                 </tr>
                             </thead>";
                             
@@ -82,13 +81,13 @@
                                 <tr>
                                     <td>".$row["id"]."</td>
                                     <td>". $row["pdfname"]."</td>
-                                    <td bgcolor=". $row["color"]."></td>
+                                    <td><input type=checkbox style='pointer-events: none;' "; if($row['color']==1) echo "checked"; echo"></td>
                                     <td>".$row['pages']."</td>
                                     <td>". $row["copies"]."</td>
                                     <td>". $row["cost"]."</td>
-                                    <td bgcolor=".$row["printstatus"]."></td>
-                                    <td bgcolor=".$row["collectstatus"]."></td>
-                                    <td bgcolor=".$row["paystatus"]."></td>
+                                    <td><input type=checkbox style='pointer-events: none;' "; if($row['printstatus']==1) echo "checked"; echo"></td>
+                                    <td><input type=checkbox style='pointer-events: none;' "; if($row['collectstatus']==1) echo "checked"; echo"></td>
+                                    <td><input type=checkbox style='pointer-events: none;' "; if($row['paystatus']==1) echo "checked"; echo"></td>
                                 </tr>";
                             }
                         echo"</table>";
@@ -133,7 +132,7 @@
   $lastid=$row["balance"];
   echo $lastid; ?>';
   bal=parseInt(bal);
-  b.innerHTML ='Amount to be paid is '+bal;
+  b.innerHTML ='Amount to be paid is ₹'+bal;
     function color(b)
     {
         if(b==0)
