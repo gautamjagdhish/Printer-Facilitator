@@ -64,7 +64,8 @@
             document.getElementById('message').innerHTML = 'Passwords do not match';
         }
     }
-    function checkpwd(){
+    function checkpwd()
+    {
         if (document.getElementById('pwd1').value != document.getElementById('pwd2').value)
         {
             alert("Password do not match");
