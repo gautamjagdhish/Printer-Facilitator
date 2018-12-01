@@ -29,9 +29,9 @@
                             <form class="align-content-center" method="POST" enctype="multipart/form-data" action="">
                                 <div class="form-group col-lg-4 offset-lg-4">
                                     <br>
-                                    <input type="text" class="form-control" placeholder="Enter Roll No"  onkeyup='checkint();' name="rno" id='rno' required>
+                                    <input type="text" class="form-control" placeholder="Enter Roll No"  maxlength=10 onkeyup='checkint();' name="rno" id='rno' required>
                                     <br>
-                                    <input type="password" placeholder="Enter Password" class="form-control" name="psw" id=pwd1 onkeyup='check();' required>
+                                    <input type="password" placeholder="Enter Password" class="form-control" name="psw" id=pwd1 required>
                                     <span class='password-match' id='message'></span>
                                     <br>
                                     <input type="password" placeholder="Repeat Password" class="form-control" name="psw-repeat" id=pwd2 onkeyup='check();' required>

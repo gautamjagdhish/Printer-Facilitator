@@ -24,6 +24,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light offset-lg-0 col-lg-12">
+        
             <a class="navbar-brand" href="action.php">Printer Facilitator</a>
         </nav>
         <header>
@@ -37,7 +38,7 @@
                             </div>
                             <form class="align-content-center" method="POST" enctype="multipart/form-data" action="">
                                 <div class="form-group col-lg-4 offset-lg-4">
-                                    <input type="text" class="form-control" placeholder="Enter Roll No" name="rno" required>
+                                    <input type="text" class="form-control" placeholder="Enter Roll No" name="rno" maxlength=10 required>
                                     <br>
                                     <input type="password" class="form-control" placeholder="Enter Password" name="psw" required>
                                     <br>

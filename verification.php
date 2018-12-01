@@ -30,13 +30,12 @@
                         <div class="col-12">
                             <h1 class="text-center">Email Verification</h1>
                             <form class="align-content-center" method="POST" enctype="multipart/form-data" action="">
-                                <div class="form-group col-lg-5 offset-lg-4">
-                                    <span id="not">Please Enter the verification code sent to your email</span>
+                                <div class="form-group col-lg-4 offset-lg-4">
+                                    <span id="not">Please check your iitdh email for code</span>
                                     <p id='yes'></p>
                                     <input type="text" class="form-control" placeholder="Enter Code"  onkeyup='checkint();' name="code" id="code" required>
                                     <br>
                                     <button type="submit" class="btn btn-primary" style="width:100%" onclick='return checkint();' name="submit">Submit</button>
-                                    <a href="login.php" class="nav-link">Already created a account?</a>
                                 </div>
                             </form>
                         </div>

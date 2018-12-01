@@ -16,11 +16,14 @@ if($_SESSION['level']=='admin')
 	<link href="css/bootstrap-4.0.0.css" rel="stylesheet">
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light offset-lg-0 col-lg-12"><a class="navbar-brand" href="action.php">Printer Facilitator</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light offset-lg-0 col-lg-12">
+		<a class="navbar-brand" href="action.php">Printer Facilitator</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> 
+				<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-			<li class="nav-item active align-items-lg-end"> <a class="nav-link" href="printhistory.php">Print History<span class="sr-only">(current)</span></a></li>
+				<li class="nav-item active align-items-lg-end"> <a class="nav-link" href="printhistory.php">Print History<span class="sr-only">(current)</span></a></li>
 				<li class="nav-item"> <a class="nav-link" href="logout.php">Log Out</a></li>
 			</ul>
 		</div>
@@ -37,7 +40,6 @@ if($_SESSION['level']=='admin')
 								<input type="file" class="form-control" name="file" id='file' required>
 								<label for="Pages">Pages</label>		
 								<input type="text" class="form-control" name="pages" id="pages" value="1" required>
-								<!--<input type=button onclick=></button>-->
 								<label for="Upload">Copies</label>
 								<input type="number" class="form-control" name="copies" id='copies' min=1 value=1 required>
 								<input type="checkbox" name="color" id='color' value="true" unchecked><label for="Color" >Color</label><br>
@@ -55,6 +57,9 @@ if($_SESSION['level']=='admin')
 			</div>
 		</div>
 	</header>
+	<script src="js/jquery-3.2.1.min.js"></script> 
+	<script src="js/popper.min.js"></script> 
+	<script src="js/bootstrap-4.0.0.js"></script>
 </body>
 </html>
 <script>
@@ -135,7 +140,7 @@ if($_SESSION['level']=='admin')
 		else
 			color=1;
 		var totalcost=copies*count1*color;
-		alert("copies "+copies+"\ncolor "+color+"\npages "+count1);
+		//alert("copies "+copies+"\ncolor "+color+"\npages "+count1);
 		r=confirm("Cost of Printing is ₹"+totalcost);
 		if(r==true)
 			document.getElementById('totalcost').value=totalcost;

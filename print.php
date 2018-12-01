@@ -1,5 +1,5 @@
-
-<html>
-    <link rel="stylesheet" href="css/bootstrap-4.0.0.css">
-    <a href="uploads/136_1_1_0.pdf" class=btn-link target="_blank">Open PDF</a>
-</html>
+<?php 
+date_default_timezone_set("Asia/Kolkata");
+$date = date_create();
+$timestamp=date_format($date, 'd-m-Y H:i:s');
+?>

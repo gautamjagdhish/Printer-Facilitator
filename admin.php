@@ -12,7 +12,7 @@ if($_SESSION['level']=='student')
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Print!</title>
+	<title>Print History</title>
 	<link href="css/bootstrap-4.0.0.css" rel="stylesheet">
 	<style>
 		table, td, th 
@@ -31,10 +31,12 @@ if($_SESSION['level']=='student')
 	</style>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light offset-lg-0 col-lg-12"><a class="navbar-brand" href="action.php">Printer Facilitator</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light offset-lg-0 col-lg-12"><a class="navbar-brand" href="admin.php">Printer Facilitator</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
+            	<li class="nav-item"> <a class="nav-link" href="payments.php">Make Payment</a></li>
+            <li class="nav-item"> <a class="nav-link" href="payhistory.php">Payment History</a></li>
 				<li class="nav-item"> <a class="nav-link" href="logout.php">Log Out</a></li>
 			</ul>
 		</div>
@@ -56,16 +58,15 @@ if($_SESSION['level']=='student')
 								<thead>
 									<tr>
 										<th width=100>ID</td>
-										<th width=300>Roll Number</td>
+										<th width=150>Roll Number</td>
 										<th width=300>PDF Name</td>
 										<th width=100>Color</td>
 										<th width=100>Pages</td>
 										<th width=100>Copies</td>
-										<th width=100>Cost</td>
+										<th width=150>Cost</td>
 										<th width=100>Printed</td>
 										<th width=100>Collected</td>
-										<th width=100>Paid</td>
-										<th width=200>Make Changes</td>
+										<th width=300>Make Changes</td>
 									</tr>
 								</thead>";
 								while($row = $result->fetch_assoc()) 
@@ -78,44 +79,44 @@ if($_SESSION['level']=='student')
 										<td><input type=checkbox style='pointer-events: none;'"; if($row['color']==1) echo "checked"; echo"></td>
 										<td>".$row['pages']."</td>
 										<td>". $row["copies"]."</td>
-										<td>". $row["cost"]."</td>
+										<td>₹". $row["cost"]."</td>
 										<form action='' method=post>
-										<td><input type=checkbox name=ps "; if($row['printstatus']==1) echo "checked"; echo"></td>
-										<td><input type=checkbox name=cs "; if($row['collectstatus']==1) echo "checked"; echo"></td>
-										<td><input type=checkbox name=pay "; if($row['paystatus']==1) echo "checked"; echo"></td>
-										<td><input type=submit class=btn btn-primary name=submit value=Change></input></td>
-										<input type=hidden name=idfind value=".$row["id"].">
+											<td><input type=checkbox name=ps "; if($row['printstatus']==1) echo "checked"; echo"></td>
+											<td><input type=checkbox name=cs "; if($row['collectstatus']==1) echo "checked"; echo"></td>";
+											//<td><input type=hidden name=pay "; if($row['paystatus']==1) echo "checked"; echo"></td>
+											echo"<td><input type=submit class=btn name=submit value=Change></input></td>
+											<input type=hidden name=idfind value=".$row["id"].">
 										</form>
 									</tr>";
-										if(isset($_REQUEST['submit']))
+									if(isset($_REQUEST['submit']))
+									{
+										$id=$_POST['idfind'];
+										if(isset($_POST['ps']))
 										{
-											$id=$_POST['idfind'];
-											if(isset($_POST['ps']))
-											{
-												mysqli_query($conn,"UPDATE printhistory SET printstatus=1 WHERE id='$id'");
-											}
-											if(empty($_POST['ps']))
-											{
-												mysqli_query($conn,"UPDATE printhistory SET printstatus=0 WHERE id='$id'");
-											}
-											if(isset($_POST['cs']))
-											{
-												mysqli_query($conn,"UPDATE printhistory SET collectstatus=1 WHERE id='$id'");
-											}
-											if(empty($_POST['cs']))
-											{
-												mysqli_query($conn,"UPDATE printhistory SET collectstatus=0 WHERE id='$id'");
-											}
-											if(isset($_POST['pay']))
-											{
-												mysqli_query($conn,"UPDATE printhistory SET paystatus=1 WHERE id='$id'");
-											}
-											if(empty($_POST['pay']))
-											{
-												mysqli_query($conn,"UPDATE printhistory SET paystatus=0 WHERE id='$id'");
-											}
-											header("Location:admin.php");
-										}	
+											mysqli_query($conn,"UPDATE printhistory SET printstatus=1 WHERE id='$id'");
+										}
+										if(empty($_POST['ps']))
+										{
+											mysqli_query($conn,"UPDATE printhistory SET printstatus=0 WHERE id='$id'");
+										}
+										if(isset($_POST['cs']))
+										{
+											mysqli_query($conn,"UPDATE printhistory SET collectstatus=1 WHERE id='$id'");
+										}
+										if(empty($_POST['cs']))
+										{
+											mysqli_query($conn,"UPDATE printhistory SET collectstatus=0 WHERE id='$id'");
+										}
+										if(isset($_POST['pay']))
+										{
+											mysqli_query($conn,"UPDATE printhistory SET paystatus=1 WHERE id='$id'");
+										}
+										if(empty($_POST['pay']))
+										{
+											mysqli_query($conn,"UPDATE printhistory SET paystatus=0 WHERE id='$id'");
+										}
+										header("Location:admin.php");
+									}	
 								}
 							echo"</table>";
 							} 
@@ -127,40 +128,8 @@ if($_SESSION['level']=='student')
 			</div>
 		</div>
 	</header>
-<section>
-	<div class="container">
-</div>
-<div class="container ">
-	<div class="row">
-	<div class="col-md-6 col-sm-12 text-center col-lg-4 offset-lg-4">
-		<span id=balance><h1></h1></span>
-	</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-lg-12 mb-4 mt-2 text-center">
-	</div>
-</div>
-	<footer class="text-center">
-	<div class="container">
-		<div class="row">
-		<div class="col-12">
-			<a class="nav-link" href="logout.php">Log Out</a>
-		</div>
-		</div>
-	</div>
-	</footer>
 	<script src="js/jquery-3.2.1.min.js"></script> 
 	<script src="js/popper.min.js"></script> 
 	<script src="js/bootstrap-4.0.0.js"></script>
 </body>
 </html>
-<script>
-	function color(b)
-	{
-		if(b==0)
-			return 'red'
-		else
-			return 'green';
-	}
-</script>
