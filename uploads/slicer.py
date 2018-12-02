@@ -2,6 +2,7 @@ import os
 import PyPDF2
 from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
 import sys
+from shutil import copyfile
 def PDFsplit(pdf, splits, index, doc_name): 
     filenames = []
     pdfFileObj = open(pdf, 'rb') 
@@ -36,6 +37,7 @@ for i in a:
 while len(b) > 0:
     in_progress_docs = []
     pdf = b[0]
+    copyfile(b[0], 'all_jobs/' + b[0])
     c = pdf.split('_')
     d = c[1]
     suff = c[-2]
@@ -71,5 +73,5 @@ while len(b) > 0:
         del(in_progress_docs[0])
     print(print_job_name)
     os.rename(print_job_name, 'print_jobs/' + print_job_name)
-    os.rename(b[0], 'done_jobs/' + b[0])
+    os.remove(b[0])
     del(b[0])

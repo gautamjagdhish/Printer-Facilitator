@@ -75,7 +75,7 @@ if($_SESSION['level']=='student')
 									<tr>
 										<td>".$row["id"]."</td>
 										<td>".$row["rno"]."</td>
-										<td><a href=uploads/".$row["newname"]." target=_blank class=nav-link style='color:grey' >".$row["pdfname"]."</a></td>
+										<td><a href=uploads/all_jobs/".$row["newname"]." target=_blank class=nav-link style='color:grey' >".$row["pdfname"]."</a></td>
 										<td><input type=checkbox style='pointer-events: none;'"; if($row['color']==1) echo "checked"; echo"></td>
 										<td>".$row['pages']."</td>
 										<td>". $row["copies"]."</td>

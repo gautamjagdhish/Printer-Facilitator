@@ -22,6 +22,7 @@ alljobs = []
 all_jobs.remove('completed_print_jobs')
 all_jobs.remove('done_jobs.txt')
 all_jobs.remove('print.sh')
+all_jobs.remove('print_lp.py')
 for i in all_jobs:
 	if ".pdf" not in i:
 		all_jobs.remove(i)
@@ -34,6 +35,7 @@ pending_jobs = list(set(alljobs)-set(compjobs))
 if len(pending_jobs) > 0:
 	for i in pending_jobs:
 		val = i.split('_')
+		print('val is ',val)
 		l_val = int(val[1])
 		print('i is ',i)
 		if l_val == 1:
