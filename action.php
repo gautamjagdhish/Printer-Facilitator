@@ -40,6 +40,8 @@ if($_SESSION['level']=='admin')
 								<input type="file" class="form-control" name="file" id='file' required>
 								<label for="Pages">Pages</label>		
 								<input type="text" class="form-control" name="pages" id="pages" value="1" required>
+								<span><font size=2>Please write valid single page numbers and/or page number range, separated by comma, in ascending order. Example input:1,23-45,51,54-65</font></span>
+								<br>
 								<label for="Upload">Copies</label>
 								<input type="number" class="form-control" name="copies" id='copies' min=1 value=1 required>
 								<input type="checkbox" name="color" id='color' value="true" unchecked><label for="Color" >Color</label><br>
