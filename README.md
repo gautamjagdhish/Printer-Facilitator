@@ -72,7 +72,7 @@ Contains the roll number, password(hashed using SHA-256 encryption), level(stude
 Contains the Print Job ID, pdfname while uploading, new pdf name, Roll Number of the student, Page Range(s), Number of Copies, Color/B&W, Cost, Print Status and Collection Status
 ### payments Table(for maintaining payment history):
 Contains Payment ID, Roll number of the student, Amount Paid and Timestamp(date&time)
-## Website Info:
+## PHP Info:
 #### database.php:
 Establishes the connection to mysql database 'printq'. Included in all the php files which requires the database
 #### signup.php(for signing up new users): 
@@ -93,7 +93,7 @@ To update the balance of a user if any payment is made and payment history is ma
 Contains the payment history of users
 #### logout.php(for logging out):
 Clears all the session variables and the user is logged out
-## How the Python Scripts Works ?:
+## How the Python Scripts Works ?
 #### pythonrunner.sh
 The script, when activated, runs a file system monitor which activates 'slicer.py' whenever a new file is added to this directory.
 #### master/uploads/slicer.py
