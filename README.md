@@ -1,10 +1,10 @@
 # Printer-Facilitator
 ## Languages Used:
-Front-End: PHP
+ PHP
 
-Back-End: MYSQL
+MYSQL
 
-For printing automation : Python and bash
+Python and bash
 
 ## Get Started
 ### Pre-Requisites:
